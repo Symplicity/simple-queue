@@ -3,6 +3,7 @@
 namespace SimpleQueue\Adapter;
 
 use Aws\Sqs\SqsClient;
+use SimpleQueue\Exception\NotSupportedException;
 use SimpleQueue\Job;
 use SimpleQueue\QueueAdapterInterface;
 use DateTime;
@@ -113,6 +114,20 @@ class AwsSqsQueueAdapter implements QueueAdapterInterface
         $job->unserialize($resultMessage['Body']);
 
         return $job;
+    }
+
+    
+    /**
+     * Wait and get multiple jobs from a queue
+     *
+     * @access public
+     * @param array $args
+     * @return array
+     * @throws NotSupportedException
+     */
+    public function batchPull(array $args = [])
+    {
+        throw new NotSupportedException('Batch Pull is not supported by AwsSqsQueueAdapter.');
     }
 
     /**

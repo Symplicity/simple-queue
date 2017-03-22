@@ -16,6 +16,9 @@ use SimpleQueue\QueueAdapterInterface;
  */
 class AmqpQueueAdapter implements QueueAdapterInterface
 {
+    const PREFETCH_COUNT = 50;
+    const BATCH_COUNT = 50;
+
     /**
      * @var AMQPChannel
      */
@@ -108,6 +111,44 @@ class AmqpQueueAdapter implements QueueAdapterInterface
         $job->unserialize($message->getBody());
 
         return $job;
+    }
+
+    /**
+     * Wait and pull jobs in batches
+     *
+     * @param array $args
+     * @return array
+     */
+    public function batchPull(array $args = [])
+    {
+        $prefetchCount = empty($args['prefetchCount']) ? self::PREFETCH_COUNT : (int) $args['prefetchCount'];
+        $batchCount = empty($args['batchCount']) ? self::BATCH_COUNT : (int) $args['batchCount'];
+
+        $this->channel->basic_qos(null, $prefetchCount, null);
+
+        $messages = array();
+        $count = 0;
+        while (true) {
+            /** @var AMQPMessage $message */
+            $message = $this->channel->basic_get($this->queue, false);
+            if ($message) {
+                $count++;
+                $job = new Job();
+                $job->setId($message->get('delivery_tag'));
+                $job->unserialize($message->getBody());
+                $messages[] = $job;
+            }
+
+            if (!$message || $count >= $batchCount) {
+                $count = 0;
+                if (is_array($messages) && count($messages)) {
+                    return $messages;
+                }
+            }
+            if (!$message) {
+                usleep(500000);
+            }
+        }
     }
 
     /**

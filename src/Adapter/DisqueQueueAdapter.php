@@ -5,6 +5,7 @@ namespace SimpleQueue\Adapter;
 use DateTime;
 use Disque\Client as DisqueClient;
 use Disque\Queue\Job as DisqueJob;
+use SimpleQueue\Exception\NotSupportedException;
 use SimpleQueue\Job;
 use SimpleQueue\QueueAdapterInterface;
 
@@ -81,6 +82,19 @@ class DisqueQueueAdapter implements QueueAdapterInterface
         }
 
         return new Job($disqueJob->getBody(), $disqueJob->getId());
+    }
+
+    /**
+     * Wait and get multiple jobs from a queue
+     *
+     * @access public
+     * @param array $args
+     * @return array
+     * @throws NotSupportedException
+     */
+    public function batchPull(array $args = [])
+    {
+        throw new NotSupportedException('Batch Pull is not supported by DisqueQueueAdapter.');
     }
 
     /**

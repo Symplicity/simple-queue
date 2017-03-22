@@ -65,6 +65,18 @@ class Queue implements QueueAdapterInterface
     }
 
     /**
+     * Wait and get multiple jobs from a queue
+     *
+     * @access public
+     * @param array $args
+     * @return array
+     */
+    public function batchPull(array $args = [])
+    {
+        return $this->queueAdapter->batchPull($args);
+    }
+
+    /**
      * Acknowledge a job
      *
      * @access public

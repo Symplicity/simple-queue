@@ -38,6 +38,16 @@ interface QueueAdapterInterface
      */
     public function pull();
 
+    
+    /**
+     * Wait and get multiple jobs from a queue
+     *
+     * @access public
+     * @param array $args
+     * @return array
+     */
+    public function batchPull(array $args = []);
+
     /**
      * Acknowledge a job
      *

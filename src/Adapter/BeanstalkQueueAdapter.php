@@ -6,6 +6,7 @@ use DateTime;
 use Pheanstalk\Job as BeanstalkJob;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
+use SimpleQueue\Exception\NotSupportedException;
 use SimpleQueue\Job;
 use SimpleQueue\QueueAdapterInterface;
 
@@ -89,6 +90,19 @@ class BeanstalkQueueAdapter implements QueueAdapterInterface
         $job->unserialize($beanstalkJob->getData());
 
         return $job;
+    }
+
+    /**
+     * Wait and get multiple jobs from a queue
+     *
+     * @access public
+     * @param array $args
+     * @return array
+     * @throws NotSupportedException
+     */
+    public function batchPull(array $args = [])
+    {
+        throw new NotSupportedException('Batch Pull is not supported by BeanstalkQueueAdapter.');
     }
 
     /**

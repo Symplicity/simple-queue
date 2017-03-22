@@ -74,6 +74,19 @@ class MemoryQueueAdapter implements QueueAdapterInterface
     }
 
     /**
+     * Wait and get multiple jobs from a queue
+     *
+     * @access public
+     * @param array $args
+     * @return array
+     * @throws NotSupportedException
+     */
+    public function batchPull(array $args = [])
+    {
+        throw new NotSupportedException('Batch Pull is not supported by MemoryQueueAdapter.');
+    }
+
+    /**
      * Acknowledge a job
      *
      * @access public
