@@ -54,6 +54,18 @@ class BeanstalkQueueAdapter implements QueueAdapterInterface
     }
 
     /**
+     * batch publish messages
+     *
+     * @access public
+     * @param array $messages
+     * @throws NotSupportedException
+     */
+    public function batchPush(array $messages)
+    {
+        throw new NotSupportedException('Batch Push is not supported by BeanstalkQueueAdapter.');
+    }
+
+    /**
      * Schedule a job in the future
      *
      * @access public
@@ -66,7 +78,7 @@ class BeanstalkQueueAdapter implements QueueAdapterInterface
         $now = new DateTime();
         $when = clone($dateTime);
         $delay = $when->getTimestamp() - $now->getTimestamp();
-        
+
         $this->beanstalk->putInTube($this->queueName, $job->serialize(), Pheanstalk::DEFAULT_PRIORITY, $delay);
         return $this;
     }

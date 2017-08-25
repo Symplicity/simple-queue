@@ -43,6 +43,18 @@ class MemoryQueueAdapter implements QueueAdapterInterface
     }
 
     /**
+     * batch publish messages
+     *
+     * @access public
+     * @param array $messages
+     * @throws NotSupportedException
+     */
+    public function batchPush(array $messages)
+    {
+        throw new NotSupportedException('Batch Push is not supported by MemoryQueueAdapter.');
+    }
+
+    /**
      * Schedule a job in the future
      *
      * @access public
