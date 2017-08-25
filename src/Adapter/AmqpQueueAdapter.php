@@ -63,6 +63,27 @@ class AmqpQueueAdapter implements QueueAdapterInterface
     }
 
     /**
+     * batch publish messages (json encoded)
+     *
+     * @access public
+     * @param  array $messages
+     * @return $this
+     */
+    public function batchPush(array $messages)
+    {
+        $chunks = array_chunk($messages, 50);
+        foreach ($chunks as $chunk) {
+            foreach($chunk as $message) {
+                $job = new Job($message);
+                $ampqMessage = new AMQPMessage($job->serialize(), array('content_type' => 'text/plain'));
+                $this->channel->batch_basic_publish($ampqMessage, $this->exchange);
+            }
+            $this->channel->publish_batch();
+        }
+        return $this;
+    }
+
+    /**
      * Schedule a job in the future
      *
      * @access public

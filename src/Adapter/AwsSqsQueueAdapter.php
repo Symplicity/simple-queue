@@ -68,6 +68,18 @@ class AwsSqsQueueAdapter implements QueueAdapterInterface
     }
 
     /**
+     * batch publish messages 
+     *
+     * @access public
+     * @param array $messages
+     * @throws NotSupportedException
+     */
+    public function batchPush(array $messages)
+    {
+        throw new NotSupportedException('Batch Push is not supported by AwsSqsQueueAdapter.');
+    }
+
+    /**
      * Schedule a job in the future
      *
      * @access public
@@ -116,7 +128,7 @@ class AwsSqsQueueAdapter implements QueueAdapterInterface
         return $job;
     }
 
-    
+
     /**
      * Wait and get multiple jobs from a queue
      *

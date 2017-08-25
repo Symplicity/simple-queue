@@ -39,6 +39,11 @@ class Queue implements QueueAdapterInterface
         return $this;
     }
 
+    public function batchPush(array $messages)
+    {
+        return $this->queueAdapter->batchPush($messages);
+    }
+
     /**
      * Schedule a job in the future
      *
